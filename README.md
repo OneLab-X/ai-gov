@@ -115,12 +115,12 @@ flowchart LR
 You need [Docker](https://docs.docker.com/get-docker/) with Compose v2. Nothing else.
 
 ```bash
-git clone https://github.com/OWNER/REPO.git && cd REPO
+git clone https://github.com/OneLab-X/ai-gov.git && cd ai-gov
 cp .env.example .env
 docker compose up --build
 ```
 
-That starts PostgreSQL, Redis, OPA (with the policies mounted), MinIO, the API, a Celery
+That starts PostgreSQL, Redis, OPA (with the policies mounted), SeaweedFS object storage, the API, a Celery
 worker and the scheduler. On first boot the API runs migrations, seeds baseline data and
 pushes the policies into OPA.
 
@@ -129,7 +129,6 @@ pushes the policies into OPA.
 | API docs (Swagger) | <http://localhost:8000/docs> |
 | API docs (ReDoc) | <http://localhost:8000/redoc> |
 | Readiness probe | <http://localhost:8000/health/ready> |
-| MinIO console | <http://localhost:9001> |
 | OPA | <http://localhost:8181> |
 
 Seeded demo logins, all with password `ChangeMe123!`:
@@ -326,7 +325,7 @@ Adding a jurisdiction is a data change plus tests, documented step by step in
                           │                    │
                           │              ┌─────▼──────┐
                           │              │   Worker   │ ──► ReportLab ──► PDF
-                          │              │  (Celery)  │ ──► boto3 ─────► S3 / MinIO
+                          │              │  (Celery)  │ ──► boto3 ─────► S3 storage
                           │              └────────────┘
 ```
 
@@ -339,7 +338,7 @@ Adding a jurisdiction is a data change plus tests, documented step by step in
 | Async work | Celery (+ beat for scheduled re-checks) |
 | Policy engine | Open Policy Agent over its REST Data API |
 | Documents | ReportLab (PDF) + canonical JSON manifest |
-| Object storage | Any S3-compatible endpoint (MinIO locally) |
+| Object storage | Any S3-compatible endpoint (SeaweedFS locally) |
 | Auth | JWT (python-jose) + bcrypt (passlib), RBAC |
 | Observability | structlog JSON logs, correlation IDs, Prometheus `/metrics` |
 
@@ -795,7 +794,7 @@ All settings come from the environment (or `.env`) via `pydantic-settings`; see
 | `POSTGRES_*` / `DATABASE_URL` | local defaults | `DATABASE_URL` wins if set |
 | `REDIS_URL` | `redis://localhost:6379/0` | cache, rate limits, Celery broker |
 | `OPA_URL` | `http://localhost:8181` | falls back to declarative rules if down |
-| `S3_*` | MinIO defaults | any S3-compatible endpoint |
+| `S3_*` | local SeaweedFS | any S3-compatible endpoint |
 | `RATE_LIMIT_ENABLED` / `RATE_LIMIT_DEFAULT` | `true` / `120/minute` | per token, else per IP |
 | `RATE_LIMIT_LOGIN` | `10/minute` | login and refresh |
 | `RATE_LIMIT_EVIDENCE` | `20/hour` | evidence generation |
@@ -844,7 +843,7 @@ branch naming, the PR process, code style, and step-by-step guides for
 [adding a jurisdiction](CONTRIBUTING.md#adding-a-new-jurisdiction) and
 [adding a policy](CONTRIBUTING.md#adding-or-changing-a-policy).
 
-- **Bugs and features:** open an [issue](https://github.com/OWNER/REPO/issues/new/choose)
+- **Bugs and features:** open an [issue](https://github.com/OneLab-X/ai-gov/issues/new/choose)
 - **Security problems:** follow [SECURITY.md](SECURITY.md) — never a public issue
 - **Behaviour:** [Code of Conduct](CODE_OF_CONDUCT.md) (Contributor Covenant 2.1)
 

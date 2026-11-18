@@ -198,5 +198,5 @@ generation and dashboards.
 - The seeder refuses to create demo accounts outside `local`/`test` unless
   `SEED_DEMO_USERS` is set explicitly, and honours `SEED_ADMIN_PASSWORD`.
 
-[Unreleased]: https://github.com/OWNER/REPO/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/OWNER/REPO/releases/tag/v0.1.0
+[Unreleased]: https://github.com/OneLab-X/ai-gov/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/OneLab-X/ai-gov/releases/tag/v0.1.0

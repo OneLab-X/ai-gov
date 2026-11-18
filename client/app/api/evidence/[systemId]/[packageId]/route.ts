@@ -3,16 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * Streams an evidence package to the browser.
  *
- * The backend presigns object-storage URLs against its own view of MinIO, which under
- * docker compose is `http://minio:9000` — a hostname only resolvable inside the compose
+ * The backend presigns object-storage URLs against its own view of object storage,
+ * which under docker compose is `http://storage:9000` — a hostname only resolvable inside the compose
  * network. Linking to it directly would give every user a dead download.
  *
  * Rewriting the host is not an option: S3 signatures cover the Host header, so a
  * rewritten URL fails the signature check. Instead this handler runs server-side, where
- * `minio:9000` *does* resolve, fetches the object with the signature intact, and pipes
+ * `storage:9000` *does* resolve, fetches the object with the signature intact, and pipes
  * the bytes back.
  *
- * Running `next dev` on the host instead of in compose? Add `127.0.0.1 minio` to your
+ * Running `next dev` on the host instead of in compose? Add `127.0.0.1 storage` to your
  * hosts file (see client/README.md).
  */
 
@@ -80,7 +80,7 @@ export async function GET(
       {
         error:
           "Could not reach object storage. If you are running the client outside docker " +
-          "compose, add `127.0.0.1 minio` to your hosts file.",
+          "compose, add `127.0.0.1 storage` to your hosts file.",
         detail,
       },
       { status: 502 },

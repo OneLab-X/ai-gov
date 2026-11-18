@@ -7,13 +7,6 @@ import { Steps, Aside } from '@astrojs/starlight/components';
 
 You need [Docker](https://docs.docker.com/get-docker/) with Compose v2. Nothing else.
 
-<Aside type="caution" title="Known issue before v0.1">
-The pinned MinIO image in `docker-compose.yml` can no longer be pulled from any registry, so
-a fresh `docker compose up` currently fails at image pull. Replacing it with SeaweedFS is the
-first item on the v0.1 roadmap. Until that lands, see the
-[workaround in self-hosting](../self-hosting/#object-storage).
-</Aside>
-
 <Steps>
 
 1. Clone and configure:
@@ -53,7 +46,8 @@ first item on the v0.1 roadmap. Until that lands, see the
 
 <Aside>
 If PostgreSQL or Redis already runs on your machine, ports 5432 or 6379 will clash. Set
-`POSTGRES_PORT=15432` and `REDIS_PORT=16379` in `.env`.
+`POSTGRES_PORT=15432` and `REDIS_PORT=16379` in `.env`. Object storage publishes port 9000;
+change it with `S3_PORT`.
 </Aside>
 
 ## Walk the flow with the API

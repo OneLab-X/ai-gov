@@ -1,7 +1,8 @@
 # Phase 3 proposal: landing site + docs
 
 Status: **approved 2026-11-18, scaffolded** on branch `feat/site`.
-Decisions D5–D7 in [ROADMAP.md](ROADMAP.md) apply.
+Decisions: GitHub Pages at `onelab-x.github.io/ai-gov` (Astro `base: "/ai-gov"`), Astro +
+Starlight for landing page and docs, GoatCounter analytics (cookieless, optional).
 
 ## Why Astro + Starlight
 
@@ -10,7 +11,7 @@ Decisions D5–D7 in [ROADMAP.md](ROADMAP.md) apply.
 - Static output → GitHub Pages with no server.
 - `starlight-openapi` renders the API reference from `openapi.json`, so API docs can't
   drift from FastAPI.
-- MDX lets regulation pages embed tables generated from `policies/*/MAPPING.yaml` later (ROADMAP 2.2).
+- MDX lets regulation pages embed tables generated from `policies/*/MAPPING.yaml`.
 - Docusaurus would also work, but it ships more JS and makes a custom marketing page more
   awkward. VitePress is weaker at OpenAPI rendering.
 
@@ -43,7 +44,7 @@ site/
 ```
 
 Most docs content gets **moved** out of the 894-line README (auth modes, decision
-contract, detection rules, audit guarantees). The README then shrinks to ≤150 lines (ROADMAP 1.13).
+contract, detection rules, audit guarantees). The README then shrinks to ≤150 lines.
 
 ## Landing page sections
 
@@ -54,9 +55,8 @@ contract, detection rules, audit guarantees). The README then shrinks to ≤150 
 5. **Architecture:** the diagram from STATE §1, simplified.
 6. **Quickstart:** `git clone …` / `make demo` / open `localhost:3000`.
 7. **Comparison:** table of spreadsheets vs. commercial GRC suites vs. AI Governance Console. Rows: cost, self-hosted, policy-as-code, multi-jurisdiction detection, audit trail, evidence generation, extensibility. Keep it factual and avoid naming vendors.
-8. **Roadmap:** v0.2 / v0.3 highlights, linking to ROADMAP.
-9. **Contribute:** "Add a jurisdiction" call-to-action, good-first-issues link, Discussions.
-10. **Footer:** Apache-2.0, not-legal-advice disclaimer, GitHub, security policy.
+8. **Contribute:** "Add a jurisdiction" call-to-action, good-first-issues link, Discussions.
+9. **Footer:** Apache-2.0, not-legal-advice disclaimer, GitHub, security policy.
 
 ## Build & deploy
 

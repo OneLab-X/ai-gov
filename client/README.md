@@ -17,7 +17,7 @@ Zustand · Recharts · React Hook Form + Zod · next-themes · sonner · lucide-
 ### With Docker Compose (recommended)
 
 From the **repository root**, this brings up the API, worker, PostgreSQL, Redis, OPA,
-MinIO and this client together:
+object storage and this client together:
 
 ```bash
 cp .env.example .env
@@ -132,23 +132,23 @@ fail" holds everywhere and in both themes. Call sites never pass a colour.
 ## Evidence downloads
 
 Evidence packages live in object storage, and the backend presigns their URLs against its
-own view of MinIO — `http://minio:9000` under Compose. That hostname only resolves inside
+own view of object storage — `http://storage:9000` under Compose. That hostname only resolves inside
 the Compose network, so linking a browser straight at it gives a dead download. The host
 cannot simply be rewritten either: S3 signatures cover the `Host` header.
 
 So downloads go through a Next route handler
 (`app/api/evidence/[systemId]/[packageId]/route.ts`) that runs server-side, where
-`minio:9000` does resolve, fetches the object with its signature intact, and streams the
+`storage:9000` does resolve, fetches the object with its signature intact, and streams the
 bytes back. The browser sends its bearer token with that request, so the file is fetched
 with `fetch` and saved as a blob rather than through a plain `<a href>`, which cannot carry
 an `Authorization` header.
 
 **Running `npm run dev` on the host instead of in Compose?** Then the Next server is not on
 the Compose network either. Add an alias so the presigned host resolves to the published
-MinIO port:
+storage port:
 
 ```
-127.0.0.1 minio
+127.0.0.1 storage
 ```
 
 in `/etc/hosts`. Without it, downloads return a 502 explaining exactly this.

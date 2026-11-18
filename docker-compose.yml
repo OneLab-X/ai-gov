@@ -23,9 +23,9 @@ x-app-env: &app-env
   POSTGRES_DB: ${POSTGRES_DB:-aigov}
   REDIS_URL: redis://redis:6379/0
   OPA_URL: http://opa:8181
-  S3_ENDPOINT_URL: http://minio:9000
-  S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
-  S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+  S3_ENDPOINT_URL: http://storage:9000
+  S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-aigov}
+  S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-aigov-dev-secret}
   S3_BUCKET: ${S3_BUCKET:-aigov-evidence}
   CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
   SEED_ON_START: ${SEED_ON_START:-true}
@@ -88,21 +88,18 @@ services:
     volumes:
       - ./policies:/policies:ro
 
-  minio:
-    # MinIO removed its Docker Hub repository (minio/minio now returns 404), so pull
-    # from quay.io. Pinned: `latest` there has been frozen since this release, and a
-    # floating tag on a discontinued distribution can disappear without notice.
-    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+  # S3-compatible object storage for evidence packages. SeaweedFS with no identities
+  # file accepts any access key, which is fine for a local stack; point S3_* at AWS S3,
+  # R2 or another hardened store in production.
+  storage:
+    image: chrislusf/seaweedfs:4.53
     restart: unless-stopped
-    command: ["server", "/data", "--console-address", ":9001"]
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    command:
+      ["server", "-dir=/data", "-s3", "-s3.port=9000", "-master.volumeSizeLimitMB=64", "-volume.max=0"]
     ports:
-      - "${MINIO_PORT:-9000}:9000"
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+      - "${S3_PORT:-9000}:9000"
     volumes:
-      - miniodata:/data
+      - storagedata:/data
 
   # --- application ----------------------------------------------------------
   # Runs migrations, seeds baseline data and pushes policies to OPA, then serves.
@@ -127,7 +124,7 @@ services:
         condition: service_healthy
       opa:
         condition: service_started
-      minio:
+      storage:
         condition: service_started
 
   # Generates evidence packages (PDF + JSON) off the request path.
@@ -172,7 +169,7 @@ services:
 
   # --- frontend --------------------------------------------------------------
   # Also proxies evidence downloads: object-storage URLs are presigned against
-  # http://minio:9000, which only resolves inside this network.
+  # http://storage:9000, which only resolves inside this network.
   client:
     build:
       context: ./client
@@ -193,4 +190,4 @@ services:
 volumes:
   pgdata:
   redisdata:
-  miniodata:
+  storagedata:

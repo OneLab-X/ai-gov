@@ -13,9 +13,9 @@ const all = totals();
     <p class="eyebrow">Regulation coverage</p>
     <h2>Four regimes, plus your own baseline</h2>
     <p class="lead">
-      Every system is checked for applicability under each regime. Where policy packs exist, the
-      system is also evaluated rule by rule. The counts below are read from{' '}
-      <code>policies/</code> when this page is built: {all.rules} rules and {all.tests} Rego tests today.
+      Every system is checked for applicability and risk tier under each regime, and evaluated
+      rule by rule against the bundled Rego policies. Counts are read from{' '}
+      <code>policies/</code> at build time: {all.rules} rules backed by {all.tests} Rego tests.
     </p>
     <div class="grid four cards">
       {
@@ -24,9 +24,9 @@ const all = totals();
             <div class="head">
               <span class="code">{j.code}</span>
               {j.stats.rules > 0 ? (
-                <span class="pill">{j.stats.rules} rules</span>
+                <span class="pill">{j.stats.rules} Rego rules</span>
               ) : (
-                <span class="pill warn">Policy pack in progress</span>
+                <span class="pill">Detection + risk tiering</span>
               )}
             </div>
             <h3>{j.name}</h3>
@@ -46,7 +46,7 @@ const all = totals();
     <p class="note">
       Plus a <strong>global baseline</strong> ({global.rules} rules) that applies to every system:
       generative-AI content labelling, notice for automated decisions, and vendor diligence for
-      third-party models. Detection and risk classification work for all four regimes today.
+      third-party models. Add your own packages under <code>policies/</code> to extend any regime.
     </p>
   </div>
 </section>

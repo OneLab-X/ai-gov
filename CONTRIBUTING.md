@@ -40,7 +40,7 @@ For day-to-day Python work, run the services in Docker and the app on your machi
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
-docker compose up -d postgres redis opa minio
+docker compose up -d postgres redis opa storage
 alembic upgrade head && python scripts/seed.py
 uvicorn app.main:app --reload
 ```
