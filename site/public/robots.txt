@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://iamkallolpratim.github.io/ai-gov/sitemap-index.xml
+Sitemap: https://onelab-x.github.io/ai-gov/sitemap-index.xml

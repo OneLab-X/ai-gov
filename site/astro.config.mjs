@@ -4,16 +4,16 @@ import starlight from '@astrojs/starlight';
 import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi';
 import regoGrammar from './src/lib/rego.tmLanguage.json' with { type: 'json' };
 
-// Served from GitHub Pages at https://iamkallolpratim.github.io/ai-gov/.
+// Served from GitHub Pages at https://onelab-x.github.io/ai-gov/.
 // For a custom domain: add public/CNAME, set SITE_URL to the domain and SITE_BASE to "/".
-const site = process.env.SITE_URL ?? 'https://iamkallolpratim.github.io';
+const site = process.env.SITE_URL ?? 'https://onelab-x.github.io';
 const base = process.env.SITE_BASE ?? '/ai-gov';
 
 // Privacy-friendly, cookieless analytics. Only emitted when a code is configured, so
 // forks and local builds never report to the upstream account.
 const goatcounter = process.env.PUBLIC_GOATCOUNTER_CODE;
 
-const repo = 'https://github.com/iamkallolpratim/ai-gov';
+const repo = 'https://github.com/OneLab-X/ai-gov';
 
 export default defineConfig({
   site,

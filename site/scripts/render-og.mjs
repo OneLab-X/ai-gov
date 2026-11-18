@@ -33,7 +33,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <text x="80" y="336" font-size="62" font-weight="700" fill="#c9dbf6" letter-spacing="-1">Prove you follow them.</text>
   <text x="80" y="392" font-size="26" fill="#ffffff" fill-opacity="0.8">Open-source AI compliance as code · OPA policies · evidence on demand</text>
   ${chipSvg}
-  <text x="80" y="560" font-size="22" fill="#ffffff" fill-opacity="0.7">github.com/iamkallolpratim/ai-gov · Apache 2.0</text>
+  <text x="80" y="560" font-size="22" fill="#ffffff" fill-opacity="0.7">github.com/OneLab-X/ai-gov · Apache 2.0</text>
 </svg>`;
 
 await sharp(Buffer.from(svg)).png().toFile(out);
